@@ -10,7 +10,7 @@ creds_dict = eval(creds_json)
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 
-sheet = client.open("BOX_CONTENTS").worksheet("Sheet1")
+sheet = client.open("MelissodesSpecimensIndex").worksheet("BOX_CONTENTS")
 data = sheet.get_all_values()
 
 #postgres setup
