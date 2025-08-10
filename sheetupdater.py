@@ -2,6 +2,7 @@ import os
 import psycopg2
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
 
 #sheets setup
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -26,12 +27,39 @@ cur = conn.cursor()
 
 #insert/update
 for row in data[1:]:
-    col1, col2 = row[0], row[1]
-    cur.execute("""
-                INSERT INTO box_contents (col1, col2)
-                VALUES (%s, %s)
-                ON CONFLICT (col1) DO UPDATE SET col2 = EXCLUDED.col2
-                """, (col1, col2))
+    try:
+        b_box = int(row[0]) if row[0] else None
+        b_group = row[1] or None
+        b_label = row[2] or None
+        accession = int(row[3]) if row[3] else None
+        source = row[4] or None
+        sex = row[5] or None
+        collection_event = row[6] or None
+        latitude = float(row[7]) if row[7] else None
+        longitude = float(row[8]) if row[8] else None
+        host = row[9] or None
+        date_str = row[10]
+        date = datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else None
+
+        cur.execute("""
+            INSERT INTO box_contents 
+            (b_box, b_group, b_label, accession, source, sex, collection_event, latitude, longitude, host, date)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (accession) DO UPDATE SET
+                b_box = EXCLUDED.b_box
+                b_group = EXCLUDED.b_group
+                b_label = EXCLUDED.b_label
+                source = EXCLUDED.source
+                sex = EXCLUDED.sex,
+                collection_event = EXCLUDED.collection_event
+                latitude = EXCLUDED.latitude
+                longitude = EXCLUDED.longitude
+                host = EXCLUDED.host
+                date = EXCLUDED.date
+            """, (b_box, b_group, b_label, accession, source, sex, collection_event, latitude, longitude, host, date))
+    
+    except Exception as e:
+        print(f"Skipping row due to error: {row} | Error: {e}")
     
 conn.commit()
 cur.close()
