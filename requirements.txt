@@ -1,0 +1,4 @@
+gspread
+psycopg2-binary
+oauth2client
+python-dotenv
