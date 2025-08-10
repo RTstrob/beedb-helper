@@ -28,7 +28,7 @@ cur = conn.cursor()
 #insert/update
 for row in data[1:]:
     try:
-        b_box = row[0] else None
+        b_box = row[0] or None
         b_group = row[1] or None
         b_label = row[2] or None
         accession = int(row[3]) if row[3] else None
