@@ -39,7 +39,7 @@ for row in data[1:]:
         longitude = float(row[8]) if row[8] else None
         host = row[9] or None
         date_str = row[10]
-        date = datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else None
+        date = datetime.strptime(date_str, "%m/%d/%Y").date() if date_str else None
 
         cur.execute("""
             INSERT INTO box_contents 
