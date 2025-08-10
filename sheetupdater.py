@@ -46,16 +46,16 @@ for row in data[1:]:
             (b_box, b_group, b_label, accession, source, sex, collection_event, latitude, longitude, host, date)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (accession) DO UPDATE SET
-                b_box = EXCLUDED.b_box
-                b_group = EXCLUDED.b_group
-                b_label = EXCLUDED.b_label
-                source = EXCLUDED.source
-                sex = EXCLUDED.sex,
-                collection_event = EXCLUDED.collection_event
-                latitude = EXCLUDED.latitude
-                longitude = EXCLUDED.longitude
-                host = EXCLUDED.host
-                date = EXCLUDED.date
+                "b_box" = EXCLUDED."b_box",
+                "b_group" = EXCLUDED."b_group",
+                "b_label" = EXCLUDED."b_label",
+                "source" = EXCLUDED."source",
+                "sex" = EXCLUDED."sex",
+                "collection_event" = EXCLUDED."collection_event",
+                "latitude" = EXCLUDED."latitude",
+                "longitude" = EXCLUDED."longitude",
+                "host" = EXCLUDED."host",
+                "date" = EXCLUDED."date"
             """, (b_box, b_group, b_label, accession, source, sex, collection_event, latitude, longitude, host, date))
     
     except Exception as e:
